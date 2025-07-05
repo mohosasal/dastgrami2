@@ -28,12 +28,12 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.postgresql:postgresql:42.2.18")
 	testImplementation("io.mockk:mockk:1.13.8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
 	testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.1")
+	runtimeOnly("com.h2database:h2")
 }
 
 kotlin {

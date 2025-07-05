@@ -1,37 +1,32 @@
-import { Shape } from '../types'
+// src/components/StatusBar.tsx
+import { Shape } from "../types"
 
 interface Props {
     shapes: Shape[]
 }
 
-const StatusBar = ({ shapes }: Props) => {
-    const circleCount = shapes.filter(shape => shape.type === 'circle').length
-    const squareCount = shapes.filter(shape => shape.type === 'square').length
-    const triangleCount = shapes.filter(shape => shape.type === 'triangle').length
+export default function StatusBar({ shapes }: Props) {
+    const circle = shapes.filter(s => s.type === "circle").length
+    const square = shapes.filter(s => s.type === "square").length
+    const triangle = shapes.filter(s => s.type === "triangle").length
 
     return (
-        <footer className="bg-gray-100 border-t py-2 px-4 flex justify-between items-center
-                      text-sm text-gray-700 shadow-inner">
-            <div className="flex items-center gap-4">
+        <footer className="bg-white border-t px-6 py-2 flex justify-between items-center text-gray-700 text-sm shadow">
+            <div className="flex items-center gap-8">
                 <div className="flex items-center gap-1">
-                    <span className="w-4 h-4 rounded-full bg-blue-400 border border-blue-700 inline-block"></span>
-                    <span>Circle: {circleCount}</span>
+                    <svg width={18} height={18}><circle cx={9} cy={9} r={8} fill="#60a5fa" /></svg>
+                    <span>Circle: {circle}</span>
                 </div>
                 <div className="flex items-center gap-1">
-          <span className="w-4 h-4 bg-yellow-400 border border-yellow-700 inline-block"
-                style={{ width: '16px', height: '16px' }}></span>
-                    <span>Square: {squareCount}</span>
+                    <svg width={18} height={18}><rect x={3} y={3} width={12} height={12} fill="#facc15" /></svg>
+                    <span>Square: {square}</span>
                 </div>
                 <div className="flex items-center gap-1">
-          <span className="inline-block"
-                style={{ width: '0', borderLeft: '8px solid transparent', borderRight: '8px solid transparent', borderBottom: '16px solid #34d399' }}>
-          </span>
-                    <span>Triangle: {triangleCount}</span>
+                    <svg width={18} height={18}><polygon points="9,3 15,15 3,15" fill="#34d399" /></svg>
+                    <span>Triangle: {triangle}</span>
                 </div>
             </div>
-            <div>Total: {shapes.length}</div>
+            <div className="font-semibold text-gray-700">Total: {shapes.length}</div>
         </footer>
     )
 }
-
-export default StatusBar

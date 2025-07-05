@@ -1,40 +1,49 @@
-import { ShapeType } from '../types'
+// src/components/Sidebar.tsx
+import { ShapeType } from "../types"
+
 interface Props {
     selectedTool: ShapeType
-    setSelectedTool: (type: ShapeType) => void
+    setSelectedTool: (tool: ShapeType) => void
 }
 
-const toolList: {type: ShapeType, label: string, icon: JSX.Element}[] = [
+const tools: { type: ShapeType, icon: JSX.Element, label: string }[] = [
     {
-        type: 'circle', label: 'Circle',
-        icon: <svg className="w-8 h-8" fill="none" stroke="currentColor"><circle cx="16" cy="16" r="12" strokeWidth="2" x="0" y="0" /></svg>
+        type: "circle",
+        icon: <svg width={24} height={24}><circle cx={12} cy={12} r={8} fill="#60a5fa" /></svg>,
+        label: "Circle"
     },
     {
-        type: 'square', label: 'Square',
-        icon: <svg className="w-8 h-8" fill="none" stroke="currentColor"><rect x="6" y="6" width="20" height="20" strokeWidth="2"/></svg>
+        type: "square",
+        icon: <svg width={24} height={24}><rect x={5} y={5} width={14} height={14} fill="#facc15" /></svg>,
+        label: "Square"
     },
     {
-        type: 'triangle', label: 'Triangle',
-        icon: <svg className="w-8 h-8" fill="none" stroke="currentColor"><polygon points="16,6 26,26 6,26" strokeWidth="2" /></svg>
+        type: "triangle",
+        icon: (
+            <svg width={24} height={24}><polygon points="12,5 20,19 4,19" fill="#34d399" /></svg>
+        ),
+        label: "Triangle"
     },
 ]
 
-const Sidebar = ({ selectedTool, setSelectedTool }: Props) => (
-    <aside className="w-32 bg-white shadow p-4 flex flex-col items-center">
-        <div className="font-semibold mb-4">Tools</div>
-        <div className="flex flex-col gap-4">
-            {toolList.map(tool => (
+export default function Sidebar({ selectedTool, setSelectedTool }: Props) {
+    return (
+        <aside className="w-32 bg-gray-100 border-r py-8 flex flex-col items-center gap-6">
+            <div className="text-sm font-bold text-gray-500 mb-6">Tools</div>
+            {tools.map(tool => (
                 <button
                     key={tool.type}
-                    className={`border rounded-lg p-2 flex flex-col items-center transition ${selectedTool === tool.type ? 'bg-blue-100 border-blue-500' : 'hover:bg-gray-100'}`}
+                    className={`flex flex-col items-center justify-center gap-1 p-2 rounded border transition
+            ${selectedTool === tool.type
+                        ? "bg-blue-100 border-blue-500"
+                        : "hover:bg-gray-200 border-transparent"}
+          `}
                     onClick={() => setSelectedTool(tool.type)}
                 >
                     {tool.icon}
-                    <span className="text-xs mt-1">{tool.label}</span>
+                    <span className="text-xs">{tool.label}</span>
                 </button>
             ))}
-        </div>
-    </aside>
-)
-
-export default Sidebar
+        </aside>
+    )
+}

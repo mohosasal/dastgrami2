@@ -1,4 +1,5 @@
-import { Shape } from '../types'
+// src/components/Canvas.tsx
+import { Shape } from "../types"
 
 interface Props {
     shapes: Shape[]
@@ -6,93 +7,85 @@ interface Props {
     onRemoveShape: (id: string) => void
 }
 
-const CANVAS_W = 600
-const CANVAS_H = 400
 const SHAPE_SIZE = 48
+const CANVAS_W = 520
+const CANVAS_H = 360
 
-const Canvas = ({ shapes, onAddShape, onRemoveShape }: Props) => {
-    function handleCanvasClick(e: React.MouseEvent<SVGSVGElement, MouseEvent>) {
-        const rect = e.currentTarget.getBoundingClientRect()
-        const x = e.clientX - rect.left
-        const y = e.clientY - rect.top
-        onAddShape(x, y)
+export default function Canvas({ shapes, onAddShape, onRemoveShape }: Props) {
+    // Get mouse coordinates relative to SVG
+    const handleCanvasClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+        // Only add shape if not double clicking on a shape!
+        if (e.target === e.currentTarget) {
+            const rect = e.currentTarget.getBoundingClientRect()
+            const x = e.clientX - rect.left
+            const y = e.clientY - rect.top
+            onAddShape(x, y)
+        }
+    }
+
+    // Individual shape double-click REMOVE
+    const makeRemoveHandler = (id: string) => (e: React.MouseEvent) => {
+        e.stopPropagation()
+        onRemoveShape(id)
     }
 
     return (
-        <main className="flex-1 flex justify-center items-center bg-gray-200 m-4 p-4 rounded shadow">
+        <div className="flex justify-center items-center w-full h-full min-h-[400px]">
             <svg
                 width={CANVAS_W}
                 height={CANVAS_H}
-                className="bg-white rounded border"
+                className="bg-gray-50 border shadow-lg rounded"
+                style={{ display: "block", touchAction: "none" }}
                 onClick={handleCanvasClick}
-                style={{ cursor: 'crosshair', display: 'block' }}
             >
-                {/* Render shapes */}
+                {/* Render all shapes */}
                 {shapes.map(shape => {
-                    if (shape.type === 'circle') {
-                        return (
-                            <circle
-                                key={shape.id}
-                                cx={shape.x}
-                                cy={shape.y}
-                                r={SHAPE_SIZE / 2}
-                                fill="#93c5fd"
-                                stroke="#2563eb"
-                                strokeWidth={2}
-                                onDoubleClick={e => {
-                                    e.stopPropagation()
-                                    onRemoveShape(shape.id)
-                                }}
-                                style={{ cursor: 'pointer' }}
-                            />
-                        )
+                    switch (shape.type) {
+                        case "circle":
+                            return (
+                                <circle
+                                    key={shape.id}
+                                    cx={shape.x}
+                                    cy={shape.y}
+                                    r={SHAPE_SIZE / 2}
+                                    fill="#60a5fa"
+                                    onDoubleClick={makeRemoveHandler(shape.id)}
+                                    className="cursor-pointer"
+                                />
+                            )
+                        case "square":
+                            return (
+                                <rect
+                                    key={shape.id}
+                                    x={shape.x - SHAPE_SIZE / 2}
+                                    y={shape.y - SHAPE_SIZE / 2}
+                                    width={SHAPE_SIZE}
+                                    height={SHAPE_SIZE}
+                                    fill="#facc15"
+                                    onDoubleClick={makeRemoveHandler(shape.id)}
+                                    className="cursor-pointer"
+                                />
+                            )
+                        case "triangle":
+                            const half = SHAPE_SIZE / 2
+                            return (
+                                <polygon
+                                    key={shape.id}
+                                    points={[
+                                        `${shape.x},${shape.y - half}`,
+                                        `${shape.x - half},${shape.y + half}`,
+                                        `${shape.x + half},${shape.y + half}`
+                                    ].join(" ")}
+                                    fill="#34d399"
+                                    onDoubleClick={makeRemoveHandler(shape.id)}
+                                    className="cursor-pointer"
+                                />
+                            )
+                        default:
+                            return null
                     }
-                    if (shape.type === 'square') {
-                        return (
-                            <rect
-                                key={shape.id}
-                                x={shape.x - SHAPE_SIZE / 2}
-                                y={shape.y - SHAPE_SIZE / 2}
-                                width={SHAPE_SIZE}
-                                height={SHAPE_SIZE}
-                                fill="#fbbf24"
-                                stroke="#d97706"
-                                strokeWidth={2}
-                                onDoubleClick={e => {
-                                    e.stopPropagation()
-                                    onRemoveShape(shape.id)
-                                }}
-                                style={{ cursor: 'pointer' }}
-                            />
-                        )
-                    }
-                    if (shape.type === 'triangle') {
-                        const h = SHAPE_SIZE * Math.sqrt(3) / 2
-                        const points = [
-                            `${shape.x},${shape.y - h / 2}`,
-                            `${shape.x - SHAPE_SIZE / 2},${shape.y + h / 2}`,
-                            `${shape.x + SHAPE_SIZE / 2},${shape.y + h / 2}`
-                        ].join(' ')
-                        return (
-                            <polygon
-                                key={shape.id}
-                                points={points}
-                                fill="#6ee7b7"
-                                stroke="#059669"
-                                strokeWidth={2}
-                                onDoubleClick={e => {
-                                    e.stopPropagation()
-                                    onRemoveShape(shape.id)
-                                }}
-                                style={{ cursor: 'pointer' }}
-                            />
-                        )
-                    }
-                    return null
                 })}
             </svg>
-        </main>
+        </div>
     )
 }
-
-export default Canvas

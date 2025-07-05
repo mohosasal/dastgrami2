@@ -1,46 +1,45 @@
-import React from 'react'
-import { Shape } from '../types'
+// src/components/Header.tsx
+import React from "react"
+import { Shape } from "../types"
 
 interface Props {
     onExport: () => void
     onImport: (shapes: Shape[]) => void
 }
 
-const Header = ({ onExport, onImport }: Props) => {
+const Header: React.FC<Props> = ({ onExport, onImport }) => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
             const reader = new FileReader()
             reader.onload = () => {
                 try {
-                    const shapes = JSON.parse(reader.result as string) as Shape[]
+                    const shapes = JSON.parse(reader.result as string)
                     onImport(shapes)
-                } catch {
-                    alert('Invalid file format. Please upload a valid JSON file.')
+                } catch (err) {
+                    alert("Failed to read file")
                 }
             }
             reader.readAsText(file)
+            e.target.value = "" // allow re-import
         }
-        e.target.value = ''
     }
 
     return (
-        <header className="bg-white shadow px-6 py-4 flex justify-between items-center">
-            <h1 className="text-lg font-semibold">Painting Title</h1>
-            <div className="flex gap-4">
+        <header className="bg-white shadow flex items-center px-6 py-3 justify-between border-b">
+            <div className="text-xl font-bold text-gray-800 select-none">Painting Title</div>
+            <div className="flex items-center space-x-3">
                 <button
                     onClick={onExport}
-                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition"
                 >
                     Export
                 </button>
-                <label className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded cursor-pointer">
+                <label className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded cursor-pointer transition">
                     Import
-                    <input
-                        type="file"
-                        accept="application/json"
-                        className="hidden"
-                        onChange={handleFileChange}
+                    <input type="file" accept="application/json"
+                           className="hidden"
+                           onChange={handleFileChange}
                     />
                 </label>
             </div>

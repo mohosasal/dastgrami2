@@ -38,6 +38,30 @@ export default function App() {
         a.remove()
         URL.revokeObjectURL(url)
     }
+    const USER = "salim"
+
+    async function handleSaveToServer() {
+        await fetch(
+            `http://localhost:8080/api/drawing/${USER}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(shapes)
+            }
+        )
+        alert("Saved to server!");
+    }
+
+    async function handleLoadFromServer() {
+        let resp = await fetch(`http://localhost:8080/api/drawing/${USER}`)
+        if (resp.ok) {
+            const shapes = await resp.json()
+            setShapes(shapes)
+            alert("Loaded from server!")
+        } else {
+            alert("No drawing found for this user.")
+        }
+    }
 
     function handleImport(imported: Shape[]) {
         if (Array.isArray(imported)) {
@@ -54,7 +78,8 @@ export default function App() {
 
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
-            <Header onExport={handleExport} onImport={handleImport} />
+            <Header onExport={handleExport} onImport={handleImport}   onSaveToServer={handleSaveToServer}
+                    onLoadFromServer={handleLoadFromServer} />
             <div className="flex flex-1">
                 <Sidebar selectedTool={selectedTool} setSelectedTool={setSelectedTool} />
                 <main className="flex-1 flex justify-center items-center bg-white">

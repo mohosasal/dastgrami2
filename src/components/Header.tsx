@@ -5,9 +5,11 @@ import { Shape } from "../types"
 interface Props {
     onExport: () => void
     onImport: (shapes: Shape[]) => void
+    onSaveToServer: () => void;
+    onLoadFromServer: () => void;
 }
 
-const Header: React.FC<Props> = ({ onExport, onImport }) => {
+const Header: React.FC<Props> = ({ onExport, onImport,  onSaveToServer, onLoadFromServer }) => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
@@ -35,7 +37,16 @@ const Header: React.FC<Props> = ({ onExport, onImport }) => {
                 >
                     Export
                 </button>
-                <label className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded cursor-pointer transition">
+                <button className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onClick={onSaveToServer}>
+                    Save to Server
+                </button>
+                <button className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+                        onClick={onLoadFromServer}>
+                    Load from Server
+                </button>
+                <label
+                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded cursor-pointer transition">
                     Import
                     <input type="file" accept="application/json"
                            className="hidden"

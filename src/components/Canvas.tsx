@@ -3,13 +3,14 @@ import { Shape } from '../types'
 interface Props {
     shapes: Shape[]
     onAddShape: (x: number, y: number) => void
+    onRemoveShape: (id: string) => void
 }
 
 const CANVAS_W = 600
 const CANVAS_H = 400
 const SHAPE_SIZE = 48
 
-const Canvas = ({ shapes, onAddShape }: Props) => {
+const Canvas = ({ shapes, onAddShape, onRemoveShape }: Props) => {
     function handleCanvasClick(e: React.MouseEvent<SVGSVGElement, MouseEvent>) {
         const rect = e.currentTarget.getBoundingClientRect()
         const x = e.clientX - rect.left
@@ -38,6 +39,11 @@ const Canvas = ({ shapes, onAddShape }: Props) => {
                                 fill="#93c5fd"
                                 stroke="#2563eb"
                                 strokeWidth={2}
+                                onDoubleClick={e => {
+                                    e.stopPropagation()
+                                    onRemoveShape(shape.id)
+                                }}
+                                style={{ cursor: 'pointer' }}
                             />
                         )
                     }
@@ -52,6 +58,11 @@ const Canvas = ({ shapes, onAddShape }: Props) => {
                                 fill="#fbbf24"
                                 stroke="#d97706"
                                 strokeWidth={2}
+                                onDoubleClick={e => {
+                                    e.stopPropagation()
+                                    onRemoveShape(shape.id)
+                                }}
+                                style={{ cursor: 'pointer' }}
                             />
                         )
                     }
@@ -69,6 +80,11 @@ const Canvas = ({ shapes, onAddShape }: Props) => {
                                 fill="#6ee7b7"
                                 stroke="#059669"
                                 strokeWidth={2}
+                                onDoubleClick={e => {
+                                    e.stopPropagation()
+                                    onRemoveShape(shape.id)
+                                }}
+                                style={{ cursor: 'pointer' }}
                             />
                         )
                     }

@@ -23,7 +23,7 @@ const Header: React.FC<Props> = ({ onExport, onImport,  onSaveToServer, onLoadFr
                 }
             }
             reader.readAsText(file)
-            e.target.value = "" // allow re-import
+            e.target.value = ""
         }
     }
 

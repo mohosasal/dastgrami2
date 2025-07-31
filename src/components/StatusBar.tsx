@@ -1,4 +1,3 @@
-// src/components/StatusBar.tsx
 import { Shape } from "../types"
 
 interface Props {

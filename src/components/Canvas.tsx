@@ -12,9 +12,7 @@ const CANVAS_W = 520
 const CANVAS_H = 360
 
 export default function Canvas({ shapes, onAddShape, onRemoveShape }: Props) {
-    // Get mouse coordinates relative to SVG
     const handleCanvasClick = (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
-        // Only add shape if not double clicking on a shape!
         if (e.target === e.currentTarget) {
             const rect = e.currentTarget.getBoundingClientRect()
             const x = e.clientX - rect.left
@@ -23,7 +21,6 @@ export default function Canvas({ shapes, onAddShape, onRemoveShape }: Props) {
         }
     }
 
-    // Individual shape double-click REMOVE
     const makeRemoveHandler = (id: string) => (e: React.MouseEvent) => {
         e.stopPropagation()
         onRemoveShape(id)
@@ -31,14 +28,11 @@ export default function Canvas({ shapes, onAddShape, onRemoveShape }: Props) {
 
     return (
         <div className="flex justify-center items-center w-full h-full min-h-[400px]">
+
             <svg
-                width={CANVAS_W}
-                height={CANVAS_H}
-                className="bg-gray-50 border shadow-lg rounded"
-                style={{ display: "block", touchAction: "none" }}
+                className="my-canvas-svg" width={400} height={300}
                 onClick={handleCanvasClick}
             >
-                {/* Render all shapes */}
                 {shapes.map(shape => {
                     switch (shape.type) {
                         case "circle":

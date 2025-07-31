@@ -5,7 +5,7 @@ import jakarta.persistence.*
 @Entity
 data class Drawing(
     @Id
-    val username: String,
+    val id: String,
     @Lob
     var data: String
 )

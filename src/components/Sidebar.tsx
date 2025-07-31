@@ -1,4 +1,3 @@
-// src/components/Sidebar.tsx
 import { ShapeType } from "../types"
 
 interface Props {

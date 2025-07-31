@@ -6,3 +6,9 @@
     @apply bg-blue-500 text-white rounded px-3 py-1 hover:bg-blue-600 transition;
 }
 
+.my-canvas-svg {
+    border: 4px solid #230202;
+    border-radius: 12px;
+    background: #fff;
+    margin: 10px;
+}

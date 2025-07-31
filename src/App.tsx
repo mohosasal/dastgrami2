@@ -5,10 +5,12 @@ import Sidebar from "./components/Sidebar"
 import Canvas from "./components/Canvas"
 import StatusBar from "./components/StatusBar"
 import type { Shape, ShapeType } from "./types"
+import LoginForm from "./components/LoginForm";
 
 export default function App() {
     const [selectedTool, setSelectedTool] = useState<ShapeType>("circle")
     const [shapes, setShapes] = useState<Shape[]>([])
+    const [user, setUser] = useState<string | null>(null);
 
     function handleAddShape(x: number, y: number) {
         setShapes(prev => [
@@ -38,30 +40,6 @@ export default function App() {
         a.remove()
         URL.revokeObjectURL(url)
     }
-    const USER = "salim"
-
-    async function handleSaveToServer() {
-        await fetch(
-            `http://localhost:8080/api/drawing/${USER}`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(shapes)
-            }
-        )
-        alert("Saved to server!");
-    }
-
-    async function handleLoadFromServer() {
-        let resp = await fetch(`http://localhost:8080/api/drawing/${USER}`)
-        if (resp.ok) {
-            const shapes = await resp.json()
-            setShapes(shapes)
-            alert("Loaded from server!")
-        } else {
-            alert("No drawing found for this user.")
-        }
-    }
 
     function handleImport(imported: Shape[]) {
         if (Array.isArray(imported)) {
@@ -74,6 +52,35 @@ export default function App() {
         } else {
             alert("Invalid file format.")
         }
+    }
+
+    async function handleSaveToServer() {
+        if (!user) return;
+        await fetch(
+            `http://localhost:8080/api/drawing/${user}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(shapes)
+            }
+        )
+        alert("Saved to server!");
+    }
+
+    async function handleLoadFromServer() {
+        if (!user) return;
+        let resp = await fetch(`http://localhost:8080/api/drawing/${user}`)
+        if (resp.ok) {
+            const shapes = await resp.json()
+            setShapes(shapes)
+            alert("Loaded from server!")
+        } else {
+            alert("No drawing found for this user.")
+        }
+    }
+
+    if (!user) {
+        return <LoginForm onLogin={setUser} />;
     }
 
     return (
